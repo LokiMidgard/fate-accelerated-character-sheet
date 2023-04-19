@@ -77,16 +77,16 @@
 </script>
 
 <nav>
-	<button on:click={() => (id = uuidv4())}>New Char</button>
+	<button style="grid-column: 1;" on:click={() => (id = uuidv4())}>New Char</button>
 	{#if allIds.length > 0}
-		<select bind:value={id}>
+		<select style="grid-column: 2;" bind:value={id}>
 			{#each allIds as [id, name]}
 				<option value={id}>{name} ({id})</option>
 			{/each}
 		</select>
 	{/if}
 
-	<button disabled={!id} on:click={() => shareChar(id ?? '')}>Share Character</button>
+	<button style="grid-column: 3;" disabled={!id} on:click={() => shareChar(id ?? '')}>Share Character</button>
 </nav>
 <main>
 	{#if char}

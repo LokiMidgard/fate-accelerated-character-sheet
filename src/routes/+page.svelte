@@ -77,6 +77,7 @@
 </script>
 
 <nav>
+	<button on:click={() => (id = uuidv4())}>New Char</button>
 	<select bind:value={id}>
 		{#each allIds as [id, name]}
 			<option value={id}>{name} ({id})</option>
@@ -84,152 +85,195 @@
 	</select>
 
 	<button disabled={!id} on:click={() => shareChar(id ?? '')}>Share Character</button>
-	<button on:click={() => (id = uuidv4())}>New Char</button>
 </nav>
-{#if char}
-	<article>
-		<div style="display: grid; grid-template-columns: 1fr 15rem; gap: 1rem;">
-			<div class="group" style="grid-template-rows: min-content auto 1fr;">
-				<lable>Id</lable>
-				<input type="text" bind:value={char.name} placeholder="Name" />
-				<textarea bind:value={char.description} placeholder="Description" />
-			</div>
-			<div class="group" style="display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
-				<div style="grid-column: span 2;  overflow: hidden; display: grid; justify-items: center;">
-					<FateAcceleratedLogo />
+<main>
+	{#if char}
+		<article>
+			<div style="display: grid; grid-template-columns: 1fr 15rem; gap: 1rem;">
+				<div class="group" style="grid-template-rows: min-content auto 1fr;">
+					<lable>Id</lable>
+					<input type="text" bind:value={char.name} placeholder="Name" />
+					<textarea bind:value={char.description} placeholder="Description" />
 				</div>
-
-				<div class="group">
-					<lable class="center">Refresh</lable>
-					<input
-						style="min-width: 1rem; text-align: center;"
-						type="number"
-						bind:value={char.refresh}
-						placeholder="Refresh"
-					/>
-				</div>
-				<div class="group">
-					<lable class="center">FP</lable>
-					<input
-						style="min-width: 1rem; text-align: center;"
-						type="number"
-						bind:value={char.fatePoints}
-						placeholder="Fate Points"
-					/>
-				</div>
-			</div>
-			<div class="group" style=" grid-template-columns: 1fr min-content;">
-				<lable style="grid-column: span 2;"
-					>Aspects <button on:click={() => AddAspect()}>+</button>
-				</lable>
-				<input
-					style="grid-column: span 2;"
-					type="text"
-					bind:value={char.aspects.high}
-					placeholder="High Concept"
-				/>
-				<input
-					style="grid-column: span 2;"
-					type="text"
-					bind:value={char.aspects.trouble}
-					placeholder="Trouble"
-				/>
-				{#each char.aspects.other as a, i}
-					<input
-						style="margin-top: 8px;"
-						type="text"
-						bind:value={char.aspects.other[i]}
-						placeholder="Aspect"
-					/>
-					<button style="margin-top: 8px; margin-left: 8px" on:click={() => RemoveAspect(i)}
-						>-</button
+				<div class="group" style="display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
+					<div
+						style="grid-column: span 2;  overflow: hidden; display: grid; justify-items: center;"
 					>
-				{/each}
-			</div>
-			<div>
-				<div class="group">
-					<lable>Approaches </lable>
-					{#each aproaches as a, i}
-						<label style="margin-top: 8px;">
-							<input
-								type="number"
-								style="min-width: 3rem; width: 3rem;"
-								bind:value={char.aproaches[a]}
-								placeholder="Description"
-							/>
-							{a}
-						</label>
+						<FateAcceleratedLogo />
+					</div>
+
+					<div class="group">
+						<lable class="center">Refresh</lable>
+						<input
+							style="min-width: 1rem; text-align: center;"
+							type="number"
+							bind:value={char.refresh}
+							placeholder="Refresh"
+						/>
+					</div>
+					<div class="group">
+						<lable class="center">FP</lable>
+						<input
+							style="min-width: 1rem; text-align: center;"
+							type="number"
+							bind:value={char.fatePoints}
+							placeholder="Fate Points"
+						/>
+					</div>
+				</div>
+				<div class="group" style=" grid-template-columns: 1fr min-content;">
+					<lable style="grid-column: span 2;"
+						>Aspects <button on:click={() => AddAspect()}>+</button>
+					</lable>
+					<input
+						style="grid-column: span 2;"
+						type="text"
+						bind:value={char.aspects.high}
+						placeholder="High Concept"
+					/>
+					<input
+						style="grid-column: span 2;"
+						type="text"
+						bind:value={char.aspects.trouble}
+						placeholder="Trouble"
+					/>
+					{#each char.aspects.other as a, i}
+						<input
+							style="margin-top: 8px;"
+							type="text"
+							bind:value={char.aspects.other[i]}
+							placeholder="Aspect"
+						/>
+						<button style="margin-top: 8px; margin-left: 8px" on:click={() => RemoveAspect(i)}
+							>-</button
+						>
 					{/each}
 				</div>
-			</div>
-		</div>
-		<div style="display: grid; grid-template-columns: 1fr 1fr; gap:1rem;">
-			<div class="group">
-				<lable>Stunts</lable>
-				<textarea bind:value={char.stunts} placeholder="Stunts" />
-			</div>
-			<div class="group">
-				<lable>Extras</lable>
-				<textarea bind:value={char.extras} placeholder="Extras" />
-			</div>
-		</div>
-		<div style="display: grid; grid-template-columns: 1fr 1fr; gap:1rem;">
-			<div class="group">
-				<lable style="grid-column: span 3 ;">Stress</lable>
-				{#each Array.from({ length: 3 }) as _, i}
-					<div class="check" style="grid-column: {i + 1}; margin-top: 8px;">
-						<input
-							bind:checked={char.stress[i]}
-							id="check{i}"
-							class="checkbox-flip"
-							type="checkbox"
-						/>
-						<label for="check{i}">{i + 1}<span /></label>
+				<div>
+					<div class="group">
+						<lable>Approaches </lable>
+						{#each aproaches as a, i}
+							<label style="margin-top: 8px;">
+								<input
+									type="number"
+									style="min-width: 3rem; width: 3rem;"
+									bind:value={char.aproaches[a]}
+									placeholder="Description"
+								/>
+								{a}
+							</label>
+						{/each}
 					</div>
-				{/each}
-			</div>
-			<div class="group">
-				<lable>Consequences</lable>
-				<div style="display: grid;">
-					<span style="grid-column: 1; margin-top: 8px;">2</span>
-					<input
-						style="grid-column: 2; margin-top: 8px;"
-						type="text"
-						bind:value={char.consequences.mild}
-						placeholder="Mild"
-					/>
-					<span style="grid-column: 1; margin-top: 8px;">4</span>
-					<input
-						style="grid-column: 2; margin-top: 8px;"
-						type="text"
-						bind:value={char.consequences.moderate}
-						placeholder="Moderate"
-					/>
-					<span style="grid-column: 1; margin-top: 8px;">6</span>
-					<input
-						style="grid-column: 2; margin-top: 8px;"
-						type="text"
-						bind:value={char.consequences.server}
-						placeholder="Server"
-					/>
 				</div>
 			</div>
-		</div>
-	</article>
-{/if}
+			<div style="display: grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+				<div class="group">
+					<lable>Stunts</lable>
+					<textarea bind:value={char.stunts} placeholder="Stunts" />
+				</div>
+				<div class="group">
+					<lable>Extras</lable>
+					<textarea bind:value={char.extras} placeholder="Extras" />
+				</div>
+			</div>
+			<div style="display: grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+				<div class="group">
+					<lable style="grid-column: span 3 ;">Stress</lable>
+					{#each Array.from({ length: 3 }) as _, i}
+						<div class="check" style="grid-column: {i + 1}; margin-top: 8px;">
+							<input
+								bind:checked={char.stress[i]}
+								id="check{i}"
+								class="checkbox-flip"
+								type="checkbox"
+							/>
+							<label for="check{i}">{i + 1}<span /></label>
+						</div>
+					{/each}
+				</div>
+				<div class="group">
+					<lable>Consequences</lable>
+					<div style="display: grid;">
+						<span style="grid-column: 1; margin-top: 8px;">2</span>
+						<input
+							style="grid-column: 2; margin-top: 8px;"
+							type="text"
+							bind:value={char.consequences.mild}
+							placeholder="Mild"
+						/>
+						<span style="grid-column: 1; margin-top: 8px;">4</span>
+						<input
+							style="grid-column: 2; margin-top: 8px;"
+							type="text"
+							bind:value={char.consequences.moderate}
+							placeholder="Moderate"
+						/>
+						<span style="grid-column: 1; margin-top: 8px;">6</span>
+						<input
+							style="grid-column: 2; margin-top: 8px;"
+							type="text"
+							bind:value={char.consequences.server}
+							placeholder="Server"
+						/>
+					</div>
+				</div>
+			</div>
+		</article>
+	{/if}
+</main>
+<footer>
+	Code available on <a
+		href="https://github.com/LokiMidgard/fate-accelerated-character-sheet"
+		target="_blank">GitHub</a
+	>.
+</footer>
 
 <style lang="scss">
-	* {
+	:global(*) {
 		box-sizing: border-box;
 		font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode',
 			Geneva, Verdana, sans-serif;
 	}
+
+	nav {
+		display: grid;
+		grid-template-columns: 10rem auto 10rem;
+		gap: 1rem;
+		justify-content: center;
+		height: 4rem;
+		padding-top: 2rem;
+	}
+
+	main,
+	:global(body) {
+		padding: 0px;
+		margin: 0px !important;
+	}
+
+	footer {
+		padding: 1rem;
+		margin: 0px;
+		background-color: black;
+		color: white;
+
+		a {
+			color: white;
+			&:hover {
+				color: lightgray;
+			}
+		}
+	}
+
 	article {
+		padding: 1rem;
+		margin: 1rem auto;
 		max-width: 20cm;
 		display: grid;
 		gap: 1rem;
+		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 0 3px rgba(0, 0, 0, 0.6);
 	}
 
+	select,
 	input {
 		background-color: white;
 		border: 1px solid lightgray;
@@ -405,12 +449,5 @@
 				background: $border-color;
 			}
 		}
-	}
-
-	article {
-		// border: 1px solid lightgray;
-		padding: 1rem;
-		margin: 1rem;
-		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 0 3px rgba(0, 0, 0, 0.6);
 	}
 </style>

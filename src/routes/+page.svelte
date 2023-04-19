@@ -103,7 +103,7 @@
 					<lable class="center">Refresh</lable>
 					<input
 						style="min-width: 1rem; text-align: center;"
-						type="text"
+						type="number"
 						bind:value={char.refresh}
 						placeholder="Refresh"
 					/>
@@ -112,7 +112,7 @@
 					<lable class="center">FP</lable>
 					<input
 						style="min-width: 1rem; text-align: center;"
-						type="text"
+						type="number"
 						bind:value={char.fatePoints}
 						placeholder="Fate Points"
 					/>

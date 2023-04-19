@@ -78,11 +78,13 @@
 
 <nav>
 	<button on:click={() => (id = uuidv4())}>New Char</button>
-	<select bind:value={id}>
-		{#each allIds as [id, name]}
-			<option value={id}>{name} ({id})</option>
-		{/each}
-	</select>
+	{#if allIds.length > 0}
+		<select bind:value={id}>
+			{#each allIds as [id, name]}
+				<option value={id}>{name} ({id})</option>
+			{/each}
+		</select>
+	{/if}
 
 	<button disabled={!id} on:click={() => shareChar(id ?? '')}>Share Character</button>
 </nav>

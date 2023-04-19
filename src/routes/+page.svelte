@@ -1,26 +1,49 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import FateAcceleratedLogo from './Fate-Accelerated-Logo.svelte';
-	import { aproaches, updateCharacter, type Character, loadCharacter, newChar } from './model';
+	import {
+		aproaches,
+		updateCharacter,
+		type Character,
+		loadCharacter,
+		newChar,
+		getAllIds
+	} from './model';
 
 	let char: Character | undefined;
-
+	let id: string | undefined;
+	let allIds: (readonly [string, string])[] = [];
 	onMount(() => {
 		if (window.location.hash && window.location.hash.length > 1) {
+			const hasData = window.location.hash.substring(1);
 			try {
-				char = JSON.parse(decodeURIComponent(window.location.hash.substring(1)));
-				location.hash = '';
+				const newChar = JSON.parse(decodeURIComponent(hasData));
+				id = uuidv4();
+				updateCharacter(newChar, id);
 			} catch (error) {
-				console.log('error', error);
+				id = hasData;
 			}
+		} else {
+			id = uuidv4();
 		}
-		if (!char) {
-			char = loadCharacter() ?? newChar();
-		}
+		// if (!char) {
+		// 	char = newChar();
+		// 	id = uuidv4();
+		// }
 	});
 
-	$: updateCharacter(char);
+	$: {
+		updateCharacter(char, id);
+		allIds = getAllIds();
+	}
 	$: shareLink = `#${encodeURIComponent(JSON.stringify(char))}`;
+
+	$: {
+		if (id) {
+			window.location.hash = id;
+			char = loadCharacter(id) ?? newChar();
+		}
+	}
 
 	function AddAspect() {
 		if (char) {
@@ -34,10 +57,36 @@
 			char.aspects.other = change;
 		}
 	}
+	function uuidv4() {
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+			var r = (Math.random() * 16) | 0,
+				v = c == 'x' ? r : (r & 0x3) | 0x8;
+			return v.toString(16);
+		});
+	}
+
+	function shareChar(id: string) {
+		const char = loadCharacter(id);
+		if (char) {
+			navigator.share({
+				url: `#${encodeURIComponent(JSON.stringify(char))}`,
+				text: `Fate Accereated Charecter :${char.name ?? 'NAME NOT SET'}`
+			});
+		}
+	}
 </script>
 
+<nav>
+	<select bind:value={id}>
+		{#each allIds as [id, name]}
+			<option value={id}>{name} ({id})</option>
+		{/each}
+	</select>
+
+	<button disabled={!id} on:click={() => shareChar(id ?? '')}>Share Character</button>
+	<button on:click={() => (id = uuidv4())}>New Char</button>
+</nav>
 {#if char}
-	<a href={shareLink}>Share</a>
 	<article>
 		<div style="display: grid; grid-template-columns: 1fr 15rem; gap: 1rem;">
 			<div class="group" style="grid-template-rows: min-content auto 1fr;">
@@ -356,5 +405,12 @@
 				background: $border-color;
 			}
 		}
+	}
+
+	article {
+		// border: 1px solid lightgray;
+		padding: 1rem;
+		margin: 1rem;
+		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 0 3px rgba(0, 0, 0, 0.6);
 	}
 </style>

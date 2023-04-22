@@ -90,7 +90,7 @@
 				Episch
 			{:else if sum >= 8}
 				Legendär
-			{/if}
+			{/if} ({sum})
 		{:else}
 			-
 		{/if}

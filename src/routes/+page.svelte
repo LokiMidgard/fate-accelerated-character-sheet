@@ -87,7 +87,7 @@
 	<button style="grid-column: 1;" on:click={() => (id = uuidv4())}>New Char</button>
 	{#if allIds.length > 0}
 		<select style="grid-column: 2;" bind:value={id}>
-			{#each allIds as [id, name]}
+			{#each allIds.sort((a, b) => (a[1] ?? '').localeCompare(b[1] ?? '')) as [id, name]}
 				<option value={id}>{name} ({id})</option>
 			{/each}
 		</select>

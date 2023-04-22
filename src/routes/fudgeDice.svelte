@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import { onMount } from 'svelte';
 
 	const dices: [undefined | number, undefined | number, undefined | number, undefined | number] = [
 		0, 0, 0, 0
@@ -11,7 +12,11 @@
 
 	let isRoling = false;
 
-	const sounds = Array.from({ length: 4 }).map((x, i) => new Audio(`${base}/dice${i + 1}.flac`));
+	let sounds: HTMLAudioElement[];
+
+	onMount(() => {
+		sounds = Array.from({ length: 4 }).map((x, i) => new Audio(`${base}/dice${i + 1}.flac`));
+	});
 
 	export function setMdifire(mod?: number) {
 		modifire = mod ?? 0;

@@ -11,6 +11,8 @@
 	} from './model';
 	import FudgeDice from './fudgeDice.svelte';
 
+	let dices: FudgeDice;
+
 	let char: Character | undefined;
 	let id: string | undefined;
 	let allIds: (readonly [string, string])[] = [];
@@ -75,6 +77,10 @@
 			});
 		}
 	}
+
+	function capitalizeFirstLetter(string: string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
 </script>
 
 <nav>
@@ -94,7 +100,7 @@
 <div
 	style="position: fixed; border: 1px solid black; padding:1rem; top:0px; background-color: white;"
 >
-	<FudgeDice />
+	<FudgeDice bind:this={dices} />
 </div>
 <main>
 	{#if char}
@@ -170,7 +176,14 @@
 									bind:value={char.aproaches[a]}
 									placeholder="Description"
 								/>
-								{a}
+								<button
+									style="border: 0px; font-size: larger; font-weight: bolder;"
+									on:click={() => {
+										dices.setMdifire(char?.aproaches[a]), dices.role();
+									}}
+								>
+									{capitalizeFirstLetter(a)}
+								</button>
 							</label>
 						{/each}
 					</div>
@@ -288,10 +301,10 @@
 			margin-left: 19rem !important;
 			margin-right: unset !important;
 		}
-		nav{
+		nav {
 			justify-content: left;
 		}
-		
+
 		article {
 			margin-left: 0px;
 		}

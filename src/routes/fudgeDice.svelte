@@ -13,7 +13,11 @@
 
 	const sounds = Array.from({ length: 4 }).map((x, i) => new Audio(`${base}/dice${i + 1}.flac`));
 
-	async function role() {
+	export function setMdifire(mod?: number) {
+		modifire = mod ?? 0;
+	}
+
+	export async function role() {
 		if (isRoling) {
 			return;
 		}

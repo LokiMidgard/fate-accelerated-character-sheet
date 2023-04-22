@@ -9,6 +9,7 @@
 		newChar,
 		getAllIds
 	} from './model';
+	import FudgeDice from './fudgeDice.svelte';
 
 	let char: Character | undefined;
 	let id: string | undefined;
@@ -86,8 +87,15 @@
 		</select>
 	{/if}
 
-	<button style="grid-column: 3;" disabled={!id} on:click={() => shareChar(id ?? '')}>Share Character</button>
+	<button style="grid-column: 3;" disabled={!id} on:click={() => shareChar(id ?? '')}
+		>Share Character</button
+	>
 </nav>
+<div
+	style="position: fixed; border: 1px solid black; padding:1rem; top:0px; background-color: white;"
+>
+	<FudgeDice />
+</div>
 <main>
 	{#if char}
 		<article>
@@ -265,7 +273,6 @@
 			}
 		}
 	}
-
 	article {
 		padding: 1rem;
 		margin: 1rem auto;
@@ -273,6 +280,21 @@
 		display: grid;
 		gap: 1rem;
 		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 0 3px rgba(0, 0, 0, 0.6);
+	}
+
+	@media (max-width: 1400px) {
+		nav,
+		main {
+			margin-left: 19rem !important;
+			margin-right: unset !important;
+		}
+		nav{
+			justify-content: left;
+		}
+		
+		article {
+			margin-left: 0px;
+		}
 	}
 
 	select,

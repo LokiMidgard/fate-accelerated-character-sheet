@@ -10,6 +10,7 @@
 		getAllIds
 	} from './model';
 	import FudgeDice from './fudgeDice.svelte';
+	import ExportView from './exportView.svelte';
 
 	let dices: FudgeDice;
 
@@ -71,17 +72,26 @@
 	function shareChar(id: string) {
 		const char = loadCharacter(id);
 		if (char) {
-			navigator.share({
+			const shareData = {
 				url: `#${encodeURIComponent(JSON.stringify(char))}`,
 				text: `Fate Accereated Charecter :${char.name ?? 'NAME NOT SET'}`
-			});
+			};
+			if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+				navigator.share(shareData);
+			} else {
+				exportText = new URL(shareData.url, document.baseURI).href;
+			}
 		}
 	}
+
+	let exportText: string | undefined;
 
 	function capitalizeFirstLetter(string: string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	}
 </script>
+
+<ExportView bind:exportText />
 
 <nav>
 	<button style="grid-column: 1;" on:click={() => (id = uuidv4())}>New Char</button>
